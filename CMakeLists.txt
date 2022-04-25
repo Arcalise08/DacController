@@ -5,11 +5,11 @@ include(C:/VSARM/sdk/pico-sdk/external/pico_sdk_import.cmake)
 add_executable(speakerparty main.cpp)
 
 # pull in common dependencies
-target_link_libraries(speakerparty pico_stdlib pico_stdio hardware_pwm hardware_i2c pico_multicore)
+target_link_libraries(DacController pico_stdlib pico_stdio hardware_i2c)
 
-project(speakerparty)
+project(DacController)
 
 set(CMAKE_CXX_STANDARD 17)
 
 pico_sdk_init()
-pico_add_extra_outputs(speakerparty)
+pico_add_extra_outputs(DacController)
