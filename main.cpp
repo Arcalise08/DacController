@@ -19,7 +19,7 @@ enum WriteMode {
 int writeToDAC(int loadPercentage, WriteMode mode = Register) {
     if (loadPercentage > 100 || loadPercentage < 0)
         return -2;
-    int percent = loadPercentage/100;
+    double percent = (double)loadPercentage/100.0;
     int load = percent * DACMaxValue;
 
     uint8_t data[3];
@@ -54,7 +54,7 @@ int main() {
     gpio_pull_up(sda_pin);
     gpio_pull_up(scl_pin);
     gpio_put(25, 1);
-
+    
     int eh = writeToDAC(80);
     if (eh == PICO_ERROR_GENERIC) {
         while(true) {
@@ -67,31 +67,28 @@ int main() {
     }
 
     int test = 100;
+    bool dir = true;
     while (true) {
-        test--;
-        if (test <= 0)
-            test = 100;
-        writeToDAC(test);
-        sleep_ms(100); 
-    }
-    int stepDown = 255;
-    int stepDown2 = DACMaxValue - 255;
-    uint8_t data[2];
-    data[0] = writeToDACRegisterMode;
-    while (true) {
-        stepDown--;
-        stepDown2--;
-        if (stepDown <= 0) {
-            stepDown = 255;
-        }
-        if (stepDown2 <= 0) {
-            stepDown2 = 240;
-        }
-        data[1] = stepDown;
-        data[2] = stepDown2;
-        i2c_write_blocking(i2c0, addr, data, 3, false);
-        sleep_ms(10); 
 
+        if (dir) {
+            test--;
+        }
+        else {
+            test++;
+        }
+
+        if (test >= 100)
+        {
+            dir = true;
+            continue;
+        }
+        if (test <= 0)
+        {
+            dir  = false;
+            continue;
+        }
+        writeToDAC(test);
+        sleep_ms(10); 
     }
     return 0;
 }

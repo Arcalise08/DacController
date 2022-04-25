@@ -1,0 +1,4 @@
+{
+    "cortex-debug.gdbPath": "arm-none-eabi-gdb",
+    "cortex-debug.openocdPath":"C:\\VSARM\\sdk\\openocd_picoprobe\\openocd.exe"
+}
